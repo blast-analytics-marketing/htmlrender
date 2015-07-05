@@ -45,7 +45,7 @@ type writer interface {
 // meta etc...
 
 // where as attributes is reserved for classes and IDS, etc..
-func Render_with_omition(w io.Writer, n *html.Node,
+func RenderSans(w io.Writer, n *html.Node,
 	elements, attributes []string) error {
 
 	if x, ok := w.(writer); ok {
@@ -85,6 +85,13 @@ func render1(w writer, n *html.Node, elements, attributes []string) error {
 		}
 		return nil
 	case html.ElementNode:
+		if containsElement(elements, n.Data) {
+			return nil
+		}
+		if containsAttribute(n.Attr, attributes) {
+			return nil
+		}
+
 		// No-op.
 	case html.CommentNode:
 		if _, err := w.WriteString("<!--"); err != nil {
@@ -258,6 +265,18 @@ func containsElement(slice []string, item string) bool {
 	for _, sliceItem := range slice {
 		if sliceItem == item {
 			return true
+		}
+	}
+	return false
+}
+
+// exAttributes, is a slice of strings of attributes that should be excluded
+func containsAttribute(slice []html.Attribute, exAttributes []string) bool {
+	for _, sliceItem := range slice {
+		for _, exItem := range exAttributes {
+			if sliceItem.Val == exItem {
+				return true
+			}
 		}
 	}
 	return false
