@@ -254,6 +254,15 @@ func writeQuoted(w writer, s string) error {
 	return nil
 }
 
+func containsElement(slice []string, item string) bool {
+	for _, sliceItem := range slice {
+		if sliceItem == item {
+			return true
+		}
+	}
+	return false
+}
+
 // Section 12.1.2, "Elements", gives this list of void elements. Void elements
 // are those that can't have any contents.
 var voidElements = map[string]bool{
