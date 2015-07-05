@@ -1,4 +1,4 @@
-package render_exclusion
+package render_sans
 
 import (
 	"fmt"
