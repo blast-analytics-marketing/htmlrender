@@ -40,12 +40,19 @@ type writer interface {
 // text node would become a tree containing <html>, <head> and <body> elements.
 // Another example is that the programmatic equivalent of "a<head>b</head>c"
 // becomes "<html><head><head/><body>abc</body></html>".
-func Render(w io.Writer, n *html.Node) error {
+
+// elements is an array of elements that should be omitted, be it body, head,
+// meta etc...
+
+// where as attributes is reserved for classes and IDS, etc..
+func Render_with_omition(w io.Writer, n *html.Node,
+	elements, attributes []string) error {
+
 	if x, ok := w.(writer); ok {
-		return render(x, n)
+		return render(x, n, elements, attributes)
 	}
 	buf := bufio.NewWriter(w)
-	if err := render(buf, n); err != nil {
+	if err := render(buf, n, elements, attributes); err != nil {
 		return err
 	}
 	return buf.Flush()
@@ -55,15 +62,15 @@ func Render(w io.Writer, n *html.Node) error {
 // has been rendered. No more end tags should be rendered after that.
 var plaintextAbort = errors.New("html: internal error (plaintext abort)")
 
-func render(w writer, n *html.Node) error {
-	err := render1(w, n)
+func render(w writer, n *html.Node, elements, attributes []string) error {
+	err := render1(w, n, elements, attributes)
 	if err == plaintextAbort {
 		err = nil
 	}
 	return err
 }
 
-func render1(w writer, n *html.Node) error {
+func render1(w writer, n *html.Node, elements, attributes []string) error {
 	// Render non-element nodes; these are the easy cases.
 	switch n.Type {
 	case html.ErrorNode:
@@ -72,7 +79,7 @@ func render1(w writer, n *html.Node) error {
 		return escape(w, n.Data)
 	case html.DocumentNode:
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
-			if err := render1(w, c); err != nil {
+			if err := render1(w, c, elements, attributes); err != nil {
 				return err
 			}
 		}
@@ -198,7 +205,7 @@ func render1(w writer, n *html.Node) error {
 					return err
 				}
 			} else {
-				if err := render1(w, c); err != nil {
+				if err := render1(w, c, elements, attributes); err != nil {
 					return err
 				}
 			}
@@ -210,7 +217,7 @@ func render1(w writer, n *html.Node) error {
 		}
 	default:
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
-			if err := render1(w, c); err != nil {
+			if err := render1(w, c, elements, attributes); err != nil {
 				return err
 			}
 		}
