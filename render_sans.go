@@ -1,3 +1,7 @@
+// a new type needs to be created, one that has an attribute for element, id, and one that is a slice for classes
+// coupled with this will be a method for a deep nested matching between thsi new type and nodes, we will then check
+// agains an array of ths newly mentioned type.
+
 package render_sans
 
 import (
