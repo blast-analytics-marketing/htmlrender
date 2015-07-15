@@ -29,6 +29,15 @@ type MinimalHtmlNode struct {
 
 // }
 
+func AttributeMatch(lookingIn, lookingFor []html.Attribute) bool {
+	for _, prospectAttr := range lookingFor {
+		if !HasAttribute(lookingIn, prospectAttr) {
+			return false
+		}
+	}
+	return true
+}
+
 // there will be an additonal layer on top of this that iterates over all
 // of the attributes
 func HasAttribute(array []html.Attribute, attribute html.Attribute) bool {

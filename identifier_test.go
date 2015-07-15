@@ -55,6 +55,143 @@ func TestattributeValueMatch_notAllAttributesPresent(t *testing.T) {
 	}
 }
 
+func TestAttributeMatch(t *testing.T) {
+	lookingFor := []html.Attribute{
+		{
+			Key: "class",
+			Val: "primary",
+		},
+		{
+			Key: "id",
+			Val: "main",
+		},
+	}
+
+	lookingIn := []html.Attribute{
+		{
+			Key: "class",
+			Val: "primary",
+		},
+		{
+			Key: "id",
+			Val: "main",
+		},
+	}
+
+	returnVal := AttributeMatch(lookingIn, lookingFor)
+	if returnVal != true {
+		t.Fatal("Expcted true, got false")
+	}
+}
+
+func TestAttributeMatch_LookingInContainsAdditionalAttribute(t *testing.T) {
+	lookingFor := []html.Attribute{
+		{
+			Key: "id",
+			Val: "main",
+		},
+	}
+
+	lookingIn := []html.Attribute{
+		{
+			Key: "class",
+			Val: "primary",
+		},
+		{
+			Key: "id",
+			Val: "main",
+		},
+	}
+
+	returnVal := AttributeMatch(lookingIn, lookingFor)
+	if returnVal != true {
+		t.Fatal("Expcted true, got false")
+	}
+}
+
+func TestAttributeMatch_LookingInDoesNotContainAllAttributes(t *testing.T) {
+	lookingFor := []html.Attribute{
+		{
+			Key: "class",
+			Val: "primary",
+		},
+		{
+			Key: "id",
+			Val: "main",
+		},
+	}
+
+	lookingIn := []html.Attribute{
+		{
+			Key: "class",
+			Val: "primary",
+		},
+	}
+
+	returnVal := AttributeMatch(lookingIn, lookingFor)
+	if returnVal != false {
+		t.Fatal("Expcted false, got true")
+	}
+}
+
+func TestAttributeMatch_attributeFormatting(t *testing.T) {
+	lookingFor := []html.Attribute{
+		{
+			Key: "class",
+			Val: "primary secondary tertiary",
+		},
+		{
+			Key: "id",
+			Val: "main",
+		},
+	}
+
+	lookingIn := []html.Attribute{
+		{
+			Key: "class",
+			Val: "secondary     tertiary    primary    ",
+		},
+		{
+			Key: "id",
+			Val: "main",
+		},
+	}
+
+	returnVal := AttributeMatch(lookingIn, lookingFor)
+	if returnVal != true {
+		t.Fatal("Expcted true, got false")
+	}
+}
+
+func TestAttributeMatch_attributePositionIndifference(t *testing.T) {
+	lookingFor := []html.Attribute{
+		{
+			Key: "id",
+			Val: "main",
+		},
+		{
+			Key: "class",
+			Val: "primary secondary tertiary",
+		},
+	}
+
+	lookingIn := []html.Attribute{
+		{
+			Key: "class",
+			Val: "primary secondary tertiary",
+		},
+		{
+			Key: "id",
+			Val: "main",
+		},
+	}
+
+	returnVal := AttributeMatch(lookingIn, lookingFor)
+	if returnVal != true {
+		t.Fatal("Expcted true, got false")
+	}
+}
+
 // func TestComparison(t *testing.T) {
 // 	min := MinimalHtmlNode{
 // 		Data: "div",
