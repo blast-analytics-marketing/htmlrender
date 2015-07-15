@@ -1,6 +1,10 @@
 package render_sans
 
-import "golang.org/x/net/html"
+import (
+	"strings"
+
+	"golang.org/x/net/html"
+)
 
 // very much like a node but with limited / minimal information.
 type MinimalHtmlNode struct {
@@ -25,11 +29,34 @@ type MinimalHtmlNode struct {
 
 // }
 
+// there will be an additonal layer on top of this that iterates over all
+// of the attributes
 func HasAttribute(array []html.Attribute, attribute html.Attribute) bool {
 	for _, a := range array {
-		if (a.Key == attribute.Key) && (a.Val == attribute.Val) {
+		if (a.Key == attribute.Key) && attributeValueMatch(a.Val, attribute.Val) {
 			return true
 		}
 	}
 	return false
+}
+
+func attributeValueMatch(attributeVal string, lookingForVal string) bool {
+	attributeList := strings.Fields(attributeVal)
+	lookingForList := strings.Fields(lookingForVal)
+
+	set := make(map[string]bool)
+
+	for _, v := range attributeList {
+		set[v] = true
+	}
+
+	for _, s := range lookingForList {
+		if !hasString(set, s) {
+			return false
+		}
+	}
+	return true
+}
+func hasString(set map[string]bool, s string) bool {
+	return set[s]
 }

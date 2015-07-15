@@ -25,6 +25,36 @@ func TestHasAttribute(t *testing.T) {
 	}
 }
 
+func TestattributeValueMatch(t *testing.T) {
+	attributeVal := "primary    secondary      tertiary"
+	s := "secondary tertiary primary"
+
+	returnVal := attributeValueMatch(attributeVal, s)
+	if returnVal != true {
+		t.Fatal("Expcted true, got false")
+	}
+}
+
+func TestattributeValueMatch_nodeHasAdditionalAttributes(t *testing.T) {
+	attributeVal := "primary    secondary      tertiary other"
+	s := "secondary tertiary primary"
+
+	returnVal := attributeValueMatch(attributeVal, s)
+	if returnVal != true {
+		t.Fatal("Expcted true, got false")
+	}
+}
+
+func TestattributeValueMatch_notAllAttributesPresent(t *testing.T) {
+	attributeVal := "primary    secondary      tertiary"
+	s := "secondary tertiary primary other"
+
+	returnVal := attributeValueMatch(attributeVal, s)
+	if returnVal != false {
+		t.Fatal("Expcted false, got true")
+	}
+}
+
 // func TestComparison(t *testing.T) {
 // 	min := MinimalHtmlNode{
 // 		Data: "div",
