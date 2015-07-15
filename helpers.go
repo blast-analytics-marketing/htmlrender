@@ -1,3 +1,7 @@
+// This file contains functions that here only to make go happy as the Render
+// and subsiquently render1 methods are re-creations from the x/tools package
+// and this satisfies functions called within render
+
 package render_sans
 
 import (

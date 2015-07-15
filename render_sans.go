@@ -2,6 +2,8 @@
 // coupled with this will be a method for a deep nested matching between thsi new type and nodes, we will then check
 // agains an array of ths newly mentioned type.
 
+// THis whole package should be capaple of both whitelisting or blacklisting what is wanted from the dom.
+
 package render_sans
 
 import (
@@ -275,6 +277,7 @@ func containsElement(slice []string, item string) bool {
 }
 
 // exAttributes, is a slice of strings of attributes that should be excluded
+// THIS WILL BE REMOVED SEE THE IDENTIFIER FILE
 func containsAttribute(slice []html.Attribute, exAttributes []string) bool {
 	for _, sliceItem := range slice {
 		for _, exItem := range exAttributes {

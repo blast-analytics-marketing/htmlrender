@@ -913,37 +913,3 @@ func TestContainsElement_failure(t *testing.T) {
 		t.Errorf("expected false, got true")
 	}
 }
-
-func TestContainsAttribute(t *testing.T) {
-	slice := []html.Attribute{
-		{
-			Key: "id",
-			Val: "main",
-		},
-	}
-	sliceOfAttributesForExlcusion := []string{
-		"main",
-	}
-	returnVal := containsAttribute(slice, sliceOfAttributesForExlcusion)
-
-	if returnVal != true {
-		t.Errorf("expected true, got false")
-	}
-}
-
-func TestContainsAttribute_failure(t *testing.T) {
-	slice := []html.Attribute{
-		{
-			Key: "id",
-			Val: "main",
-		},
-	}
-	sliceOfAttributesForExlcusion := []string{
-		"not_an_attribute",
-	}
-	returnVal := containsAttribute(slice, sliceOfAttributesForExlcusion)
-
-	if returnVal != false {
-		t.Errorf("expected false, got true")
-	}
-}
