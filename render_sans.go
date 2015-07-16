@@ -91,12 +91,13 @@ func render1(w writer, n *html.Node, elements, attributes []string) error {
 		}
 		return nil
 	case html.ElementNode:
-		if containsElement(elements, n.Data) {
-			return nil
-		}
-		if containsAttribute(n.Attr, attributes) {
-			return nil
-		}
+		// this is where we will inject functionality
+		// if containsElement(elements, n.Data) {
+		// 	return nil
+		// }
+		// if containsAttribute(n.Attr, attributes) {
+		// 	return nil
+		// }
 
 		// No-op.
 	case html.CommentNode:
@@ -265,15 +266,6 @@ func writeQuoted(w writer, s string) error {
 		return err
 	}
 	return nil
-}
-
-func containsElement(slice []string, item string) bool {
-	for _, sliceItem := range slice {
-		if sliceItem == item {
-			return true
-		}
-	}
-	return false
 }
 
 // exAttributes, is a slice of strings of attributes that should be excluded

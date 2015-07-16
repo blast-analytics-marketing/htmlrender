@@ -25,10 +25,8 @@ type MinimalHtmlNode struct {
 // contain all of the attributes the node contains, while the opposite may not be
 // true
 
-// func AttrComparison(node html.Node, identifier Identifier) bool {
-
-// }
-
+// ensures all attributes in lookingFor are present witin the looking in arg.
+// attribute values are case sensative according to the HTML spec
 func AttributeMatch(lookingIn, lookingFor []html.Attribute) bool {
 	for _, prospectAttr := range lookingFor {
 		if !HasAttribute(lookingIn, prospectAttr) {

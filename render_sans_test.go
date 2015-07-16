@@ -895,21 +895,3 @@ func TestRenderer_withMultipleClassesd(t *testing.T) {
 		t.Errorf("got vs want:\n%s\n%s\n", got, want)
 	}
 }
-
-func TestContainsElement(t *testing.T) {
-	slice := []string{"nav"}
-	returnVal := containsElement(slice, "nav")
-
-	if returnVal != true {
-		t.Errorf("expected true, got false")
-	}
-}
-
-func TestContainsElement_failure(t *testing.T) {
-	slice := []string{"nav"}
-	returnVal := containsElement(slice, "not-in-slice")
-
-	if returnVal != false {
-		t.Errorf("expected false, got true")
-	}
-}
