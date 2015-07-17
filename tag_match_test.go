@@ -38,6 +38,22 @@ func TestTagMatch_caseInsensitive(t *testing.T) {
 	}
 }
 
+func TestTagMatch_blankMinNodeData(t *testing.T) {
+	node := html.Node{
+		Data: "SpAn",
+	}
+
+	minHtmlNode := MinimalHtmlNode{
+		Data: "",
+	}
+
+	returnVal := TagMatch(node, minHtmlNode)
+
+	if returnVal != true {
+		t.Errorf("expected true, got false")
+	}
+}
+
 func TestTagMatch_failure(t *testing.T) {
 	node := html.Node{
 		Data: "div",

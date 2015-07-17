@@ -147,10 +147,8 @@ func TestRenderer(t *testing.T) {
 		`2<b empty="">3</b><i backslash="\">&amp;4</i></p>` +
 		`5<blockquote></blockquote><br/>6</body></html>`
 	b := new(bytes.Buffer)
-	omit_elements := make([]string, 0)
-	omit_attributes := make([]string, 0)
 
-	if err := RenderSans(b, nodes[0], omit_elements, omit_attributes); err != nil {
+	if err := RenderSans(b, nodes[0]); err != nil {
 		t.Fatal(err)
 	}
 	if got := b.String(); got != want {
@@ -296,10 +294,8 @@ func TestRenderer_withElementExclusion(t *testing.T) {
 		`2<b empty="">3</b><i backslash="\">&amp;4</i></p>` +
 		`5<blockquote></blockquote><br/>6</body></html>`
 	b := new(bytes.Buffer)
-	omit_elements := []string{"head"}
-	omit_attributes := make([]string, 0)
 
-	if err := RenderSans(b, nodes[0], omit_elements, omit_attributes); err != nil {
+	if err := RenderSans(b, nodes[0]); err != nil {
 		t.Fatal(err)
 	}
 	if got := b.String(); got != want {
@@ -445,10 +441,8 @@ func TestRenderer_withMultipleElementExclusion(t *testing.T) {
 		`2<b empty="">3</b><i backslash="\">&amp;4</i></p>` +
 		`5<br/>6</body></html>`
 	b := new(bytes.Buffer)
-	omit_elements := []string{"head", "blockquote"}
-	omit_attributes := make([]string, 0)
 
-	if err := RenderSans(b, nodes[0], omit_elements, omit_attributes); err != nil {
+	if err := RenderSans(b, nodes[0]); err != nil {
 		t.Fatal(err)
 	}
 	if got := b.String(); got != want {
@@ -593,10 +587,8 @@ func TestRenderer_withAttributeExclusion(t *testing.T) {
 	want := `<html><head></head><body>0&lt;1` +
 		`5<blockquote></blockquote><br/>6</body></html>`
 	b := new(bytes.Buffer)
-	omit_elements := make([]string, 0)
-	omit_attributes := []string{"main"}
 
-	if err := RenderSans(b, nodes[0], omit_elements, omit_attributes); err != nil {
+	if err := RenderSans(b, nodes[0]); err != nil {
 		t.Fatal(err)
 	}
 	if got := b.String(); got != want {
@@ -741,10 +733,8 @@ func TestRenderer_withElementAndAttributeExclusion(t *testing.T) {
 	want := `<html><body>0&lt;1` +
 		`5<blockquote></blockquote><br/>6</body></html>`
 	b := new(bytes.Buffer)
-	omit_elements := []string{"head"}
-	omit_attributes := []string{"main"}
 
-	if err := RenderSans(b, nodes[0], omit_elements, omit_attributes); err != nil {
+	if err := RenderSans(b, nodes[0]); err != nil {
 		t.Fatal(err)
 	}
 	if got := b.String(); got != want {
@@ -885,10 +875,8 @@ func TestRenderer_withMultipleClassesd(t *testing.T) {
 	want := `<html><head></head><body>0&lt;1` +
 		`5<blockquote></blockquote><br/>6</body></html>`
 	b := new(bytes.Buffer)
-	omit_elements := make([]string, 0)
-	omit_attributes := []string{"tertiary"}
 
-	if err := RenderSans(b, nodes[0], omit_elements, omit_attributes); err != nil {
+	if err := RenderSans(b, nodes[0]); err != nil {
 		t.Fatal(err)
 	}
 	if got := b.String(); got != want {
