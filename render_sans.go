@@ -279,19 +279,6 @@ func writeQuoted(w writer, s string) error {
 	return nil
 }
 
-// exAttributes, is a slice of strings of attributes that should be excluded
-// THIS WILL BE REMOVED SEE THE IDENTIFIER FILE
-func containsAttribute(slice []html.Attribute, exAttributes []string) bool {
-	for _, sliceItem := range slice {
-		for _, exItem := range exAttributes {
-			if sliceItem.Val == exItem {
-				return true
-			}
-		}
-	}
-	return false
-}
-
 // Section 12.1.2, "Elements", gives this list of void elements. Void elements
 // are those that can't have any contents.
 var voidElements = map[string]bool{

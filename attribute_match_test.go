@@ -191,3 +191,23 @@ func TestAttributeMatch_attributePositionIndifference(t *testing.T) {
 		t.Fatal("Expcted true, got false")
 	}
 }
+
+func TestAttributeMatch_noLookingForContents(t *testing.T) {
+	lookingFor := []html.Attribute{}
+
+	lookingIn := []html.Attribute{
+		{
+			Key: "class",
+			Val: "primary secondary tertiary",
+		},
+		{
+			Key: "id",
+			Val: "main",
+		},
+	}
+
+	returnVal := AttributeMatch(lookingIn, lookingFor)
+	if returnVal != true {
+		t.Fatal("Expcted true, got false")
+	}
+}

@@ -21,6 +21,11 @@ import (
 
 // ensures all attributes in lookingFor are present witin the looking in arg.
 // attribute values are case sensative according to the HTML spec
+
+// in the event that the lookingFor arugment does not contain any attributes,
+// we return true, as this would be an indication that the user looking for some
+// type of element that does not have any attributes.
+
 func AttributeMatch(lookingIn, lookingFor []html.Attribute) bool {
 	for _, prospectAttr := range lookingFor {
 		if !HasAttribute(lookingIn, prospectAttr) {
