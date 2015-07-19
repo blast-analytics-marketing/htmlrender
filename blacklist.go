@@ -8,19 +8,19 @@ import (
 	"golang.org/x/net/html"
 )
 
-func Whitelist(w io.Writer, n *html.Node, filterItems []MinimalHtmlNode) error {
+func Blacklist(w io.Writer, n *html.Node, filterItems []MinimalHtmlNode) error {
 
 	// returns true if there is ANY match between the node any MinimumHTMLNode
 	renderDecisionFunc := func(n html.Node, filterItems []MinimalHtmlNode) bool {
 		for _, minNode := range filterItems {
 			// if (TagMatch(n, minNode)) && (AttributeMatch(n.Attr, minNode.Attr)) {
-			// 	return true
+			//      return true
 			// }
 			if n.Data == minNode.Data {
-				return true
+				return false
 			}
 		}
-		return false
+		return true
 	}
 
 	err := RenderSans(w, n, renderDecisionFunc, filterItems)
