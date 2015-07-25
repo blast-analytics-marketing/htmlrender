@@ -8,6 +8,7 @@ import (
 	"golang.org/x/net/html"
 )
 
+// this is what is not working
 func Whitelist(w io.Writer, n *html.Node, filterItems []MinimalHtmlNode) error {
 
 	renderDecisionFunc := func(n html.Node, filterItems []MinimalHtmlNode) bool {

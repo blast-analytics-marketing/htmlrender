@@ -10,7 +10,7 @@ import (
 
 func Blacklist(w io.Writer, n *html.Node, filterItems []MinimalHtmlNode) error {
 
-	// returns true if there is ANY match between the node any MinimumHTMLNode
+	// returns false if there is ANY  100% match between the node any MinimumHTMLNode
 	renderDecisionFunc := func(n html.Node, filterItems []MinimalHtmlNode) bool {
 		for _, minNode := range filterItems {
 			if TagMatch(n, minNode) && AttributeMatch(n.Attr, minNode.Attr) {
