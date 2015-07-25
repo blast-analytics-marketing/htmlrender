@@ -11,19 +11,23 @@ import (
 // this is what is not working
 func Whitelist(w io.Writer, n *html.Node, filterItems []MinimalHtmlNode) error {
 
-	renderDecisionFunc := func(n html.Node, filterItems []MinimalHtmlNode) bool {
-		for _, minNode := range filterItems {
-			if TagMatch(n, minNode) && AttributeMatch(n.Attr, minNode.Attr) {
-				return true
+	for _, minNode := range filterItems {
+		nodeCopy := html.Node{
+			Data: n.Data,
+			Attr: n.Attr,
+		}
+		if TagMatch(nodeCopy, minNode) && AttributeMatch(n.Attr, minNode.Attr) {
+			err := html.Render(w, n)
+
+			if err != nil {
+				return err
 			}
 		}
-		return false
 	}
 
-	err := RenderSans(w, n, renderDecisionFunc, filterItems)
-
-	if err != nil {
-		return err
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		Whitelist(w, c, filterItems)
 	}
+
 	return nil
 }
