@@ -2,7 +2,7 @@
 // and subsiquently render1 methods are re-creations from the x/tools package
 // and this satisfies functions called within render
 
-package render_sans
+package htmlrender
 
 import (
 	"fmt"

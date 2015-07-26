@@ -4,7 +4,7 @@
 
 // THis whole package should be capaple of both whitelisting or blacklisting what is wanted from the dom.
 
-package render_sans
+package htmlrender
 
 import (
 	"bufio"

@@ -1,22 +1,22 @@
 // A whitelist only renders html elements that are included in the passed in
 // array of MinimalHtmlNode's
-package render_sans
+package sans
 
 import (
 	"io"
 
+	"github.com/naysayer/htmlrender"
 	"golang.org/x/net/html"
 )
 
-// this is what is not working
-func Whitelist(w io.Writer, n *html.Node, filterItems []MinimalHtmlNode) error {
+func Whitelist(w io.Writer, n *html.Node, filterItems []htmlrender.MinimalHtmlNode) error {
 
 	for _, minNode := range filterItems {
 		nodeCopy := html.Node{
 			Data: n.Data,
 			Attr: n.Attr,
 		}
-		if TagMatch(nodeCopy, minNode) && AttributeMatch(n.Attr, minNode.Attr) {
+		if htmlrender.TagMatch(nodeCopy, minNode) && htmlrender.AttributeMatch(n.Attr, minNode.Attr) {
 			err := html.Render(w, n)
 
 			if err != nil {

@@ -1,4 +1,4 @@
-package render_sans
+package htmlrender
 
 import "golang.org/x/net/html"
 

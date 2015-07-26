@@ -1,6 +1,6 @@
 // TODO: Clean this up as there is duplication up the wazoo
 
-package render_sans
+package htmlrender
 
 import (
 	"bytes"
