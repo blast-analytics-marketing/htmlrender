@@ -5,7 +5,7 @@ package sans
 import (
 	"io"
 
-	"github.com/naysayer/htmlrender"
+	"github.com/blast-analytics-marketing/htmlrender"
 	"golang.org/x/net/html"
 )
 
