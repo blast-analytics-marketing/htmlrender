@@ -1,4 +1,10 @@
-package render_exclusion
+// a new type needs to be created, one that has an attribute for element, id, and one that is a slice for classes
+// coupled with this will be a method for a deep nested matching between thsi new type and nodes, we will then check
+// agains an array of ths newly mentioned type.
+
+// THis whole package should be capaple of both whitelisting or blacklisting what is wanted from the dom.
+
+package htmlrender
 
 import (
 	"bufio"
@@ -40,12 +46,21 @@ type writer interface {
 // text node would become a tree containing <html>, <head> and <body> elements.
 // Another example is that the programmatic equivalent of "a<head>b</head>c"
 // becomes "<html><head><head/><body>abc</body></html>".
-func Render(w io.Writer, n *html.Node) error {
+
+// elements is an array of elements that should be omitted, be it body, head,
+// meta etc...
+
+// where as attributes is reserved for classes and IDS, etc..
+
+type renderDecision func(html.Node, []MinimalHtmlNode) bool
+
+func RenderSans(w io.Writer, n *html.Node, fn renderDecision, filterItems []MinimalHtmlNode) error {
+
 	if x, ok := w.(writer); ok {
-		return render(x, n)
+		return render(x, n, fn, filterItems)
 	}
 	buf := bufio.NewWriter(w)
-	if err := render(buf, n); err != nil {
+	if err := render(buf, n, fn, filterItems); err != nil {
 		return err
 	}
 	return buf.Flush()
@@ -55,15 +70,15 @@ func Render(w io.Writer, n *html.Node) error {
 // has been rendered. No more end tags should be rendered after that.
 var plaintextAbort = errors.New("html: internal error (plaintext abort)")
 
-func render(w writer, n *html.Node) error {
-	err := render1(w, n)
+func render(w writer, n *html.Node, fn renderDecision, filterItems []MinimalHtmlNode) error {
+	err := render1(w, n, fn, filterItems)
 	if err == plaintextAbort {
 		err = nil
 	}
 	return err
 }
 
-func render1(w writer, n *html.Node) error {
+func render1(w writer, n *html.Node, fn renderDecision, filterItems []MinimalHtmlNode) error {
 	// Render non-element nodes; these are the easy cases.
 	switch n.Type {
 	case html.ErrorNode:
@@ -72,13 +87,30 @@ func render1(w writer, n *html.Node) error {
 		return escape(w, n.Data)
 	case html.DocumentNode:
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
-			if err := render1(w, c); err != nil {
+			if err := render1(w, c, fn, filterItems); err != nil {
 				return err
 			}
 		}
 		return nil
 	case html.ElementNode:
-		// No-op.
+		// The x/html package as the following comment here, it has no
+		// "business logic": "No-op"
+
+		// the following is added as the crux of thisk functionality
+		// if should or should not reder as concluded by the fn that is
+		// passed in via argument.
+
+		// TODO: in the future we should probably not be doing a copy,
+		// as they are described as "expensive", this is done to avoid
+		// modifying the node, and not rendering the HTML as originally
+		// formatted.
+		nodeCopy := html.Node{
+			Data: n.Data,
+			Attr: n.Attr,
+		}
+		if !fn(nodeCopy, filterItems) {
+			return nil
+		}
 	case html.CommentNode:
 		if _, err := w.WriteString("<!--"); err != nil {
 			return err
@@ -198,7 +230,7 @@ func render1(w writer, n *html.Node) error {
 					return err
 				}
 			} else {
-				if err := render1(w, c); err != nil {
+				if err := render1(w, c, fn, filterItems); err != nil {
 					return err
 				}
 			}
@@ -210,7 +242,7 @@ func render1(w writer, n *html.Node) error {
 		}
 	default:
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
-			if err := render1(w, c); err != nil {
+			if err := render1(w, c, fn, filterItems); err != nil {
 				return err
 			}
 		}
